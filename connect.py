@@ -29,7 +29,7 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
-def create_employee(conn, employee):
+def insert_employee(conn, employee):
     """
     Create a new employee
     :param conn:
@@ -45,23 +45,72 @@ def create_employee(conn, employee):
         conn.commit()
     except Error as e:
         print(e)
-    
 
-# def create_employee(conn):  
-#     sql = ''' INSERT INTO employee
-#               (
-#                 James', 'E', 'Borg', '888665555', '10-NOV-1927', '450 Stone,Houston,TX', 'M', 55000, None, 1
-#               ),
-#               (
-#                 'Franklin', 'T', 'Wong', '333445555', '08-DEC-1945', '638 Voss,Houston,TX', 'M', 40000, '888665555', 5
-#               ) '''
+def insert_department(conn, department):
+    """
+    Create a new department
+    :param conn:
+    :param department:
+    """
+
+    sql = ''' INSERT INTO department(DName,Dnumber,ManagerSSN,StartDate)
+              VALUES(?,?,?,?) '''
               
-#     try:
-#         cur = conn.cursor()
-#         cur.execute(sql)
-#         conn.commit()
-#     except Error as e:
-#         print(e)  
+    try:
+        cur = conn.cursor()
+        cur.execute(sql, department)
+        conn.commit()
+    except Error as e:
+        print(e)   
+
+def insert_dept_Location(conn, dept_Location):
+     """
+    Create a new dept_Location
+    :param conn:
+    :param dept_Location:
+    """
+    sql = ''' INSERT INTO department(Dnumber,Dlocation)
+              VALUES(?,?) '''
+
+    try:
+        cur = conn.cursor()
+        cur.execute(sql, dept_Location)
+        conn.commit()
+    except Error as e:
+        print(e)
+
+def insert_project(conn, project):
+     """
+    Create a new project
+    :param conn:
+    :param project
+    """
+    sql = ''' INSERT INTO project(Pname,Pnumber,Plocation,Dnum)
+              VALUES(?,?,?,?) '''
+
+    try:
+        cur = conn.cursor()
+        cur.execute(sql, project)
+        conn.commit()
+    except Error as e:
+        print(e)        
+
+def insert_works_on(conn, works_on):
+     """
+    Create a new works_on
+    :param conn:
+    :param works_on
+    """
+    sql = ''' INSERT INTO works_on(Essn,Pno,Hours)
+              VALUES(?,?,?) '''
+
+    try:
+        cur = conn.cursor()
+        cur.execute(sql, works_on)
+        conn.commit()
+    except Error as e:
+        print(e)  
+
 
 def main():
     #create connection
@@ -132,12 +181,24 @@ def main():
      #insert Employed 
     employee_1 = ('James', 'E', 'Borg', '888665555', '10-NOV-1927', '450 Stone,Houston,TX', 'M', 55000, None, 1); 
     employee_2 = ('Franklin', 'T', 'Wong', '333445555', '08-DEC-1945', '638 Voss,Houston,TX', 'M', 40000, '888665555', 5)   
-    create_employee(conn, employee_1 )   
-    create_employee(conn, employee_2 ) 
+    insert_employee(conn, employee_1 )   
+    insert_employee(conn, employee_2 )
+    
+    department_1 = ('Research', 5, '333445555', '22-MAY-1978') 
+    insert_department(conn,department_1)
 
+    dept_Location_1 = (1, 'Houston')
+    dept_Location_2 = (4, 'Stafford')
+    insert_dept_Location(conn, dept_Location_1)
+    insert_dept_Location(conn, dept_Location_2)
 
-    # create_employee(conn)
+    project_table_1 = ('ProductX', 1, 'Bellaire', 5)
+    project_table_2 = ('ProductY', 2, 'Sugarland', 5)
+    insert_project(conn, project_table_1)
+    insert_project(conn, project_table_2)
 
+    works_on_1 = ('123456789', 1, 32.5)
+    insert_works_on(conn, works_on_1)
 
     conn.close()
 
