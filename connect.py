@@ -29,10 +29,43 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
+def create_employee(conn, employee):
+    """
+    Create a new employee
+    :param conn:
+    :param employee:
+    """
+
+    sql = ''' INSERT INTO employee(Fname,Minit,Lname,EmployeeSSN,Bdate,Address,Sex,Salary,SupervisorSSN,DepartmentNumber)
+              VALUES(?,?,?,?,?,?,?,?,?,?) '''
+              
+    try:
+        cur = conn.cursor()
+        cur.execute(sql, employee)
+        conn.commit()
+    except Error as e:
+        print(e)
+    
+
+# def create_employee(conn):  
+#     sql = ''' INSERT INTO employee
+#               (
+#                 James', 'E', 'Borg', '888665555', '10-NOV-1927', '450 Stone,Houston,TX', 'M', 55000, None, 1
+#               ),
+#               (
+#                 'Franklin', 'T', 'Wong', '333445555', '08-DEC-1945', '638 Voss,Houston,TX', 'M', 40000, '888665555', 5
+#               ) '''
+              
+#     try:
+#         cur = conn.cursor()
+#         cur.execute(sql)
+#         conn.commit()
+#     except Error as e:
+#         print(e)  
+
 def main():
     #create connection
     conn = create_connection(r"day1.db")
-
 
     sql_create_employee_table = """ CREATE TABLE IF NOT EXISTS employee (
                                     Fname varchar(15) Not Null, 
@@ -43,8 +76,8 @@ def main():
                                     Address varchar(30),
                                     Sex char,
                                     Salary Decimal(10,2),
-                                    SupervisorSSN char(9) Null,
-                                    DepaetmentNumber int   Not Null                                     
+                                    SupervisorSSN char(9),
+                                    DepartmentNumber int  Not Null                                     
                                 )"""
 
     sql_create_department_table = """ CREATE TABLE IF NOT EXISTS department (
@@ -83,8 +116,6 @@ def main():
                              )"""
 
                        
-
-
     #create tables
     if conn is not None:
          #create projects table
@@ -96,7 +127,17 @@ def main():
         
     else:
         print("Error! cannot create the database connection.")
-        
+
+
+     #insert Employed 
+    employee_1 = ('James', 'E', 'Borg', '888665555', '10-NOV-1927', '450 Stone,Houston,TX', 'M', 55000, None, 1); 
+    employee_2 = ('Franklin', 'T', 'Wong', '333445555', '08-DEC-1945', '638 Voss,Houston,TX', 'M', 40000, '888665555', 5)   
+    create_employee(conn, employee_1 )   
+    create_employee(conn, employee_2 ) 
+
+
+    # create_employee(conn)
+
 
     conn.close()
 
