@@ -34,21 +34,58 @@ def main():
     conn = create_connection(r"day1.db")
 
 
-    sql_create_employee_table = """ CREATE TABLE IF NOT EXISTS projects (
+    sql_create_employee_table = """ CREATE TABLE IF NOT EXISTS employee (
                                     id integer PRIMARY KEY,
                                     Fname text Null, 
                                     Minit text Null,
                                     Lname text Null,
+                                    EmployeeNumber text Null,
                                     Bdate date Null,
                                     Address text Null,
+                                    Sex text Null,
                                     Salary text Null,
-                                    Sex text Null  
+                                    SupervisorNumber text Null,
+                                    DepaetmentNumber text Null                                     
                                 )"""
+
+    sql_create_department_table = """ CREATE TABLE IF NOT EXISTS department (
+                                    id integer PRIMARY KEY,
+                                    Name text Null, 
+                                    Location text Null,
+                                    ManagerNumber number Null,
+                                    StartDate number Null
+                                )"""
+
+    sql_create_deptLocation_table = """ CREATE TABLE IF NOT EXISTS deptLocation (
+                                    id integer PRIMARY KEY,
+                                    Location text Null
+                                    )"""
+
+    sql_create_project_table = """ CREATE TABLE IF NOT EXISTS project (
+                                    id integer PRIMARY KEY,
+                                    Name text Null,
+                                    ProjectNumber text Null,
+                                    Location text Null,
+                                    DepartmentNumber text Null                                   
+                                )"""
+
+    sql_create_works_on_table = """ CREATE TABLE IF NOT EXISTS works_on (
+                              EmployeeNumber text Null, 
+                              ProjectNumber text Null,
+                              hours text Null                                                                  
+                            )"""
+
+                       
+
 
     # create tables
     if conn is not None:
         # create projects table
         create_table(conn, sql_create_employee_table)
+        create_table(conn, sql_create_department_table)
+        create_table(conn, sql_create_deptLocation_table)
+        create_table(conn, sql_create_project_table)
+        create_table(conn, sql_create_works_on_table)
         
     else:
         print("Error! cannot create the database connection.")
