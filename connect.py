@@ -56,37 +56,43 @@ def main():
                                     FOREIGN KEY(ManagerSSN) REFERENCES employee(EmployeeSSN)
                                 )"""
 
-    # sql_create_dept_Location_table = """ CREATE TABLE IF NOT EXISTS deptLocation (
-    #                                 id int PRIMARY KEY,
-    #                                 Dnumber 
-    #                                 Location text Null
-    #                                 )"""
+    sql_create_dept_Location_table = """ CREATE TABLE IF NOT EXISTS deptLocation (
+                                     Dnumber    INT NOT NULL,
+                                     Dlocation    VARVHAR(15) NOT NULL, 
+                                     PRIMARY KEY (Dnumber, Dlocation)
+                                     FOREIGN KEY (Dnumber) REFERENCES department(Dnumber)
+                                     )"""
 
-    # sql_create_project_table = """ CREATE TABLE IF NOT EXISTS project (
-    #                                 id int PRIMARY KEY,
-    #                                 Name text Null,
-    #                                 ProjectNumber text Null,
-    #                                 Location text Null,
-    #                                 DepartmentNumber text Null                                   
-    #                             )"""
+    sql_create_project_table = """ CREATE TABLE IF NOT EXISTS project (
+                                     Pname VARCHAR(15) NOT NULL,
+                                     Pnumber INT NOT NULL,
+                                     Plocation VARCHAR(15),
+                                     Dnum  INT NOT NULL,
+                                     PRIMARY KEY(Pnumber),
+                                     UNIQUE(Pname),
+                                     FOREIGN KEY (Dnum) REFERENCES department(Dnumber)
+                                 )"""
 
-    # sql_create_works_on_table = """ CREATE TABLE IF NOT EXISTS works_on (
-    #                           EmployeeNumber text Null, 
-    #                           ProjectNumber text Null,
-    #                           hours text Null                                                                  
-    #                         )"""
+    sql_create_works_on_table = """ CREATE TABLE IF NOT EXISTS works_on (
+                               Essn CHAR(9) NOT NULL,
+                               Pno INT    NOT NULL,
+                               Hours DECIMAL(3,1) NOT NULL,
+                               PRIMARY KEY (Essn, Pno),
+                               FOREIGN KEY (Essn) REFERENCES employee(EmployeeSSN),
+                               FOREIGN KEY (Pno) REFERENCES project(Pnumber)
+                             )"""
 
                        
 
 
-    # create tables
+    #create tables
     if conn is not None:
-        # create projects table
+         #create projects table
         create_table(conn, sql_create_employee_table)
         create_table(conn, sql_create_department_table)
-        # create_table(conn, sql_create_dept_Location_table)
-        # create_table(conn, sql_create_project_table)
-        # create_table(conn, sql_create_works_on_table)
+        create_table(conn, sql_create_dept_Location_table)
+        create_table(conn, sql_create_project_table)
+        create_table(conn, sql_create_works_on_table)
         
     else:
         print("Error! cannot create the database connection.")
