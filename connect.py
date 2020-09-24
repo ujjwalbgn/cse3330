@@ -35,45 +35,46 @@ def main():
 
 
     sql_create_employee_table = """ CREATE TABLE IF NOT EXISTS employee (
-                                    id integer PRIMARY KEY,
-                                    Fname text Null, 
-                                    Minit text Null,
-                                    Lname text Null,
-                                    EmployeeNumber text Null,
-                                    Bdate date Null,
-                                    Address text Null,
-                                    Sex text Null,
-                                    Salary text Null,
-                                    SupervisorNumber text Null,
-                                    DepaetmentNumber text Null                                     
+                                    Fname varchar(15) Not Null, 
+                                    Minit char,
+                                    Lname varchar(15) Not Null,
+                                    EmployeeSSN char(9) PRIMARY KEY,
+                                    Bdate date,
+                                    Address varchar(30),
+                                    Sex char,
+                                    Salary Decimal(10,2),
+                                    SupervisorSSN char(9) Null,
+                                    DepaetmentNumber int   Not Null                                     
                                 )"""
 
     sql_create_department_table = """ CREATE TABLE IF NOT EXISTS department (
-                                    id integer PRIMARY KEY,
-                                    Name text Null, 
-                                    Location text Null,
-                                    ManagerNumber number Null,
-                                    StartDate number Null
+                                    DName varchar(15) Not Null,
+                                    Dnumber int PRIMARY KEY,
+                                    ManagerSSN char(9) Not Null,
+                                    StartDate date, 
+                                    UNIQUE(Dname),
+                                    FOREIGN KEY(ManagerSSN) REFERENCES employee(EmployeeSSN)
                                 )"""
 
-    sql_create_deptLocation_table = """ CREATE TABLE IF NOT EXISTS deptLocation (
-                                    id integer PRIMARY KEY,
-                                    Location text Null
-                                    )"""
+    # sql_create_dept_Location_table = """ CREATE TABLE IF NOT EXISTS deptLocation (
+    #                                 id int PRIMARY KEY,
+    #                                 Dnumber 
+    #                                 Location text Null
+    #                                 )"""
 
-    sql_create_project_table = """ CREATE TABLE IF NOT EXISTS project (
-                                    id integer PRIMARY KEY,
-                                    Name text Null,
-                                    ProjectNumber text Null,
-                                    Location text Null,
-                                    DepartmentNumber text Null                                   
-                                )"""
+    # sql_create_project_table = """ CREATE TABLE IF NOT EXISTS project (
+    #                                 id int PRIMARY KEY,
+    #                                 Name text Null,
+    #                                 ProjectNumber text Null,
+    #                                 Location text Null,
+    #                                 DepartmentNumber text Null                                   
+    #                             )"""
 
-    sql_create_works_on_table = """ CREATE TABLE IF NOT EXISTS works_on (
-                              EmployeeNumber text Null, 
-                              ProjectNumber text Null,
-                              hours text Null                                                                  
-                            )"""
+    # sql_create_works_on_table = """ CREATE TABLE IF NOT EXISTS works_on (
+    #                           EmployeeNumber text Null, 
+    #                           ProjectNumber text Null,
+    #                           hours text Null                                                                  
+    #                         )"""
 
                        
 
@@ -83,12 +84,17 @@ def main():
         # create projects table
         create_table(conn, sql_create_employee_table)
         create_table(conn, sql_create_department_table)
-        create_table(conn, sql_create_deptLocation_table)
-        create_table(conn, sql_create_project_table)
-        create_table(conn, sql_create_works_on_table)
+        # create_table(conn, sql_create_dept_Location_table)
+        # create_table(conn, sql_create_project_table)
+        # create_table(conn, sql_create_works_on_table)
         
     else:
         print("Error! cannot create the database connection.")
+        
+
+    conn.close()
 
 if __name__ == '__main__':
     main()
+
+   
