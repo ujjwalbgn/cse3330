@@ -1,6 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 
+
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -17,6 +18,7 @@ def create_connection(db_file):
 
     return conn
 
+
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
     :param conn: Connection object
@@ -29,6 +31,7 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
+
 def insert_employee(conn, employee):
     """
     Create a new employee
@@ -38,13 +41,14 @@ def insert_employee(conn, employee):
 
     sql = ''' INSERT INTO employee(Fname,Minit,Lname,EmployeeSSN,Bdate,Address,Sex,Salary,SupervisorSSN,DepartmentNumber)
               VALUES(?,?,?,?,?,?,?,?,?,?) '''
-              
+
     try:
         cur = conn.cursor()
         cur.execute(sql, employee)
         conn.commit()
     except Error as e:
         print(e)
+
 
 def insert_department(conn, department):
     """
@@ -55,32 +59,34 @@ def insert_department(conn, department):
 
     sql = ''' INSERT INTO department(DName,Dnumber,ManagerSSN,StartDate)
               VALUES(?,?,?,?) '''
-              
+
     try:
         cur = conn.cursor()
         cur.execute(sql, department)
         conn.commit()
     except Error as e:
-        print(e)   
+        print(e)
 
-def insert_dept_Location(conn, dept_Location):
-     """
-    Create a new dept_Location
-    :param conn:
-    :param dept_Location:
+
+def insert_dept_Location(conn, deptLocation):
     """
-    sql = ''' INSERT INTO department(Dnumber,Dlocation)
-              VALUES(?,?) '''
+    Create a new deptLocation
+    :param conn:
+    :param deptLocation:
+    """
+
+    sql = ''' INSERT INTO deptLocation(Dnumber,Dlocation)
+               VALUES(?,?) '''
 
     try:
         cur = conn.cursor()
-        cur.execute(sql, dept_Location)
+        cur.execute(sql, deptLocation)
         conn.commit()
     except Error as e:
         print(e)
 
 def insert_project(conn, project):
-     """
+    """
     Create a new project
     :param conn:
     :param project
@@ -96,7 +102,7 @@ def insert_project(conn, project):
         print(e)        
 
 def insert_works_on(conn, works_on):
-     """
+    """
     Create a new works_on
     :param conn:
     :param works_on
