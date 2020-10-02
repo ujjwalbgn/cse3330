@@ -1,3 +1,7 @@
+#run this python script to create a database and insert data
+# Please note that this script is only meant to run once
+# running the same insertion script again will create Unique constraint fail errors.
+
 import sqlite3
 from sqlite3 import Error
 
@@ -120,7 +124,7 @@ def insert_works_on(conn, works_on):
 
 def main():
     #create connection
-    conn = create_connection(r"day1.db")
+    conn = create_connection(r"CSE3330_P1.db")
 
     sql_create_employee_table = """ CREATE TABLE IF NOT EXISTS employee (
                                     Fname varchar(15) Not Null,
@@ -335,7 +339,7 @@ def main():
 
 
     department_1 = ('Research', 5, '333445555', '22-MAY-1978')
-    department_2 = ('Research', 5, '333445555', '22-MAY-1978')
+    # department_2 = ('Research', 5, '333445555', '22-MAY-1978')
     department_3 = ('Administration', 4, '987654321', '01-JAN-1985')
     department_4 = ('Headquarters', 1, '888665555', '19-JUN-1971')
     department_5 = ('Software', 6, '111111100', '15-MAY-1999')
@@ -347,7 +351,7 @@ def main():
 
 
     insert_department(conn,department_1)
-    insert_department(conn,department_2)
+    # insert_department(conn,department_2)
     insert_department(conn,department_3)
     insert_department(conn,department_4)
     insert_department(conn,department_5)
@@ -384,6 +388,11 @@ def main():
     insert_dept_Location(conn, dept_Location_8)
     insert_dept_Location(conn, dept_Location_9)
     insert_dept_Location(conn, dept_Location_10)
+    insert_dept_Location(conn, dept_Location_11)
+    insert_dept_Location(conn, dept_Location_12)
+    insert_dept_Location(conn, dept_Location_13)
+    insert_dept_Location(conn, dept_Location_14)
+    insert_dept_Location(conn, dept_Location_15)
 
     project_table_1 = ('ProductX', 1, 'Bellaire', 5)
     project_table_2 = ('ProductY', 2, 'Sugarland', 5)
@@ -473,7 +482,7 @@ def main():
     works_on_48 = ('666666613', 61, 30.0)
     works_on_49 = ('666666613', 62, 10.0)
     works_on_50 = ('666666613', 63, 10.0)
-    works_on_51 = ('999999999', 1, 2.0)
+    works_on_95 = ('999999999', 1, 2.0)
     works_on_51 = ('999999999', 2, 2.0)
     works_on_52 = ('999999999', 3, 4.0)
     works_on_53 = ('999999999', 10, 4.0)
@@ -618,6 +627,7 @@ def main():
     insert_works_on(conn, works_on_92)
     insert_works_on(conn, works_on_93)
     insert_works_on(conn, works_on_94)
+    insert_works_on(conn, works_on_95)
 
 
     conn.close()
