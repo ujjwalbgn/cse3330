@@ -339,7 +339,6 @@ def main():
 
 
     department_1 = ('Research', 5, '333445555', '22-MAY-1978')
-    # department_2 = ('Research', 5, '333445555', '22-MAY-1978')
     department_3 = ('Administration', 4, '987654321', '01-JAN-1985')
     department_4 = ('Headquarters', 1, '888665555', '19-JUN-1971')
     department_5 = ('Software', 6, '111111100', '15-MAY-1999')
@@ -351,7 +350,6 @@ def main():
 
 
     insert_department(conn,department_1)
-    # insert_department(conn,department_2)
     insert_department(conn,department_3)
     insert_department(conn,department_4)
     insert_department(conn,department_5)
