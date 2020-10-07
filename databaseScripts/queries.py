@@ -41,11 +41,22 @@ def getProjNameHours(conn,lastName, firstName):
 def getTotalSalaries(conn, deptName):
 
     cur = conn.cursor()
-    cur.execute("SELECT SUM(Salary) FROM (employee JOIN department ON DepartmentNumber = Dnumber)WHERE DName =?", (deptName,))
+    cur.execute("SELECT Salary, Fname FROM (employee JOIN department ON DepartmentNumber = Dnumber)WHERE DName =?", (deptName,))
 
-    row = cur.fetchall()
+    rows = cur.fetchall()
 
-    print(row) 
+    for row in rows:
+        print(row)  
+
+def getAllDeptDetails(conn):
+
+    cur = conn.cursor()
+    cur.execute("SELECT DName, COUNT (*) FROM (employee JOIN department ON DepartmentNumber = Dnumber)")
+    
+    rows = cur.fetchall()
+
+    for row in rows:
+        print(row)      
 
 def main():
     #create connection
@@ -56,10 +67,13 @@ def main():
     # getNameSalaries(conn, "Research")
 
     #Enter an employee last name and first name and retrieve a list of projects names/hours per week that the employee works on
-    getProjNameHours(conn, "Wong", "Franklin")
+    # getProjNameHours(conn, "Wong", "Franklin")
     
     #Enter a department name and retrieve the total of all employee salaries who work in the department
     getTotalSalaries(conn, "Research")
+
+    #For each department, retrieve the department name and the number (count) of employees who work in that department. Order the result by number of employees in descending order
+    getAllDeptDetails(conn)
 
 if __name__ == '__main__':
     main()
