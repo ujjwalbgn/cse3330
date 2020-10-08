@@ -17,46 +17,55 @@ def connection(db_file):
 
 
 def getNameSalaries(conn, deptName):
+    print("names and salaries of all employees who work in that department")
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT Fname, Minit,Lname, Salary FROM employee, department WHERE DName=? and DepartmentNumber = Dnumber ", (deptName,))
 
-    cur = conn.cursor()
-    cur.execute("SELECT Fname, Minit,Lname, Salary FROM employee, department WHERE DName=? and DepartmentNumber = Dnumber ", (deptName,))
-
-    rows = cur.fetchall()
-
-    for row in rows:
-        print(row)
+        rows = cur.fetchall()
+        for row in rows:
+            print(row)
+    except Error as e:
+        print(e)
             
 
 
 def getProjNameHours(conn,lastName, firstName):
+    print("list of projects names/hours per week that the employee works on")
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT Pname, Hours FROM project,employee, works_on WHERE Lname=? and Fname = ? and EmployeeSSN = Essn and Pno = Pnumber ", (lastName,firstName,))
 
-    cur = conn.cursor()
-    cur.execute("SELECT Pname, Hours FROM project,employee, works_on WHERE Lname=? and Fname = ? and EmployeeSSN = Essn and Pno = Pnumber ", (lastName,firstName,))
+        rows = cur.fetchall()
 
-    rows = cur.fetchall()
-
-    for row in rows:
-        print(row)  
+        for row in rows:
+            print(row)
+    except Error as e:
+        print(e)  
 
 def getTotalSalaries(conn, deptName):
-
+    print("Retrieve the total of all employee salaries who work in the department")
     cur = conn.cursor()
-    cur.execute("SELECT Salary, Fname FROM (employee JOIN department ON DepartmentNumber = Dnumber)WHERE DName =?", (deptName,))
+    cur.execute("SELECT SUM(Salary) FROM (employee JOIN department ON DepartmentNumber = Dnumber)WHERE DName =?", (deptName,))
+    try:
+        rows = cur.fetchall()
 
-    rows = cur.fetchall()
-
-    for row in rows:
-        print(row)  
+        for row in rows:
+            print(row)
+    except Error as e:
+        print(e)  
 
 def getAllDeptDetails(conn):
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT  FROM department AND ")
+        
+        rows = cur.fetchall()
 
-    cur = conn.cursor()
-    cur.execute("SELECT DName, COUNT (*) FROM (employee JOIN department ON DepartmentNumber = Dnumber)")
-    
-    rows = cur.fetchall()
-
-    for row in rows:
-        print(row)      
+        for row in rows:
+            print(row)
+    except Error as e:
+        print(e)          
 
 def main():
     #create connection
@@ -70,7 +79,7 @@ def main():
     # getProjNameHours(conn, "Wong", "Franklin")
     
     #Enter a department name and retrieve the total of all employee salaries who work in the department
-    getTotalSalaries(conn, "Research")
+    # getTotalSalaries(conn, "Research")
 
     #For each department, retrieve the department name and the number (count) of employees who work in that department. Order the result by number of employees in descending order
     getAllDeptDetails(conn)

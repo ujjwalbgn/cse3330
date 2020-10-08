@@ -4,7 +4,8 @@
 
 import sqlite3
 from sqlite3 import Error
-import csv
+import csv 
+
 
 
 def create_connection(db_file):
@@ -31,19 +32,19 @@ def create_table(conn, create_table_sql):
 
 def insert_employee(conn):
 
-    sql = ''' INSERT INTO employee(Fname,Minit,Lname,EmployeeSSN,Bdate,Street_Address,City,Zipcode,Sex,Salary,SupervisorSSN,DepartmentNumber)
+    sql = ''' INSERT INTO employee(Fname,Minit,Lname,EmployeeSSN,Bdate,Street_Address,City,Zipcode,Sex,Sex,SupervisorSSN,DepartmentNumber)
               VALUES(?,?,?,?,?,?,?,?,?,?,?,?) '''
-
+    
     cur = conn.cursor()
-    with open('EntryFiles/EMPLOYEE.csv', "rt", encoding='ascii') as infile:
+    with open('EntryFiles/EMPLOYEE.csv', "rt") as infile:
         read = csv.reader(infile)
         for row in read:
             try:
                 cur.execute(sql, row)
                 conn.commit()
             except Error as e:
-                print(row)
-                print(e)
+               print("Emp : ")
+               print(e)
 
 
 def insert_department(conn):
@@ -51,7 +52,7 @@ def insert_department(conn):
               VALUES(?,?,?,?) '''
 
     cur = conn.cursor()
-    with open('EntryFiles/DEPARTMENT.csv', "rt", encoding='ascii') as infile:
+    with open('EntryFiles/DEPARTMENT.csv', "rt") as infile:
         read = csv.reader(infile)
         for row in read:
             try:
@@ -68,7 +69,7 @@ def insert_dept_Location(conn):
                VALUES(?,?) '''
 
     cur = conn.cursor()
-    with open('EntryFiles/DEPT_LOCATIONS.csv', "rt", encoding='ascii') as infile:
+    with open('EntryFiles/DEPT_LOCATIONS.csv', "rt") as infile:
         read = csv.reader(infile)
         for row in read:
             try:
@@ -85,7 +86,7 @@ def insert_project(conn):
               VALUES(?,?,?,?) '''
 
     cur = conn.cursor()
-    with open('EntryFiles/PROJECT.csv', "rt", encoding='ascii') as infile:
+    with open('EntryFiles/PROJECT.csv', "rt") as infile:
         read = csv.reader(infile)
         for row in read:
             try:
@@ -102,7 +103,7 @@ def insert_works_on(conn):
               VALUES(?,?,?) '''
 
     cur = conn.cursor()
-    with open('EntryFiles/WORKS_ON.csv', "rt", encoding='ascii') as infile:
+    with open('EntryFiles/WORKS_ON.csv', "rt") as infile:
         read = csv.reader(infile)
         for row in read:
             try:
@@ -115,7 +116,7 @@ def insert_works_on(conn):
 
 def main():
     #create connection
-    conn = create_connection(r"new.db")
+    conn = create_connection(r"CSE3330_P1.db")
 
     sql_create_employee_table = """ CREATE TABLE IF NOT EXISTS employee (
                                     Fname varchar(15) Not Null,
@@ -182,10 +183,10 @@ def main():
 
 
     insert_employee(conn)
-    insert_department(conn)
-    insert_dept_Location(conn)
-    insert_project(conn)
-    insert_works_on(conn)
+    # insert_department(conn)
+    # insert_dept_Location(conn)
+    # insert_project(conn)
+    # insert_works_on(conn)
 
     conn.close()
 
