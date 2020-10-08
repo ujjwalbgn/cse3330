@@ -17,7 +17,7 @@ def connection(db_file):
 
 
 def getNameSalaries(conn, deptName):
-    print("names and salaries of all employees who work in that department")
+    print("Names and salaries of all employees who work in that department: " +deptName)
     try:
         cur = conn.cursor()
         cur.execute("SELECT Fname, Minit,Lname, Salary FROM employee, department WHERE DName=? and DepartmentNumber = Dnumber ", (deptName,))
@@ -31,7 +31,7 @@ def getNameSalaries(conn, deptName):
 
 
 def getProjNameHours(conn,lastName, firstName):
-    print("list of projects names/hours per week that the employee works on")
+    print("list of projects names/hours per week that the employee ("+firstName +" "+lastName +") works on")
     try:
         cur = conn.cursor()
         cur.execute("SELECT Pname, Hours FROM project,employee, works_on WHERE Lname=? and Fname = ? and EmployeeSSN = Essn and Pno = Pnumber ", (lastName,firstName,))
@@ -44,7 +44,7 @@ def getProjNameHours(conn,lastName, firstName):
         print(e)  
 
 def getTotalSalaries(conn, deptName):
-    print("Retrieve the total of all employee salaries who work in the department")
+    print("Retrieve the total of all employee salaries who work in the department : " + deptName)
     cur = conn.cursor()
     cur.execute("SELECT SUM(Salary) FROM (employee JOIN department ON DepartmentNumber = Dnumber)WHERE DName =?", (deptName,))
     try:
@@ -55,17 +55,31 @@ def getTotalSalaries(conn, deptName):
     except Error as e:
         print(e)  
 
-def getAllDeptDetails(conn):
+def getAllDeptEmp(conn):
+    print("For each department, retrieve the department name and the number (count) of employees who work in that department. Order the result by number of employees in descending order")
     try:
         cur = conn.cursor()
-        cur.execute("SELECT  FROM department AND ")
+        cur.execute("SELECT DName, COUNT(*) from department INNER JOIN employee ON DepartmentNumber = Dnumber GROUP BY DepartmentNumber, DName ORDER BY COUNT(*) ")
         
         rows = cur.fetchall()
 
         for row in rows:
             print(row)
     except Error as e:
-        print(e)          
+        print(e)   
+
+def getSupervisor(conn):
+    print("For each employee who is a supervisor, retrieve the employee first and last name and number (count) of employees that are supervised. Order the result in descending order")
+    try:
+        cur = conn.cursor()
+        cur.execute("WITH RECURSIVE SUP_EMP (SupSsn, EmpSsn) AS (SELECT SupervisorSSN, EmployeeSSN FROM employee UNION SELECT E.EmployeeSSN, S.SupSsn FROM EMPLOYEE AS E, SUP_EMP AS S WHERE E.SupervisorSsn = S.EmpSsn) SELECT * FROM SUP_EMP ")
+        
+        rows = cur.fetchall()
+
+        for row in rows:
+            print(row)
+    except Error as e:
+        print(e)  
 
 def main():
     #create connection
@@ -73,16 +87,20 @@ def main():
     conn = connection(databaseName)
 
     #Enter a department name, and retrieve all the names and salaries of all employees who work in that department.
-    # getNameSalaries(conn, "Research")
+    getNameSalaries(conn, "Research")
 
     #Enter an employee last name and first name and retrieve a list of projects names/hours per week that the employee works on
-    # getProjNameHours(conn, "Wong", "Franklin")
+    getProjNameHours(conn, "Wong", "Franklin")
     
     #Enter a department name and retrieve the total of all employee salaries who work in the department
-    # getTotalSalaries(conn, "Research")
+    getTotalSalaries(conn, "Research")
 
     #For each department, retrieve the department name and the number (count) of employees who work in that department. Order the result by number of employees in descending order
-    getAllDeptDetails(conn)
+    getAllDeptEmp(conn)
+
+    # For each employee who is a supervisor, retrieve the employee first and last name and number (count) of employees that are supervised. Order the result in descending order.
+    #getSupervisor(conn)
+
 
 if __name__ == '__main__':
     main()
