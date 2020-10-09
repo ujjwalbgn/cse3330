@@ -1,8 +1,6 @@
 import sqlite3
 from sqlite3 import Error
 
-
-
 def connection(db_file):
     conn = None
     try:
@@ -72,7 +70,7 @@ def getSupervisor(conn):
     print("For each employee who is a supervisor, retrieve the employee first and last name and number (count) of employees that are supervised. Order the result in descending order")
     try:
         cur = conn.cursor()
-        cur.execute("WITH RECURSIVE SUP_EMP (SupSsn, EmpSsn) AS (SELECT SupervisorSSN, EmployeeSSN FROM employee UNION SELECT E.EmployeeSSN, S.SupSsn FROM EMPLOYEE AS E, SUP_EMP AS S WHERE E.SupervisorSsn = S.EmpSsn) SELECT * FROM SUP_EMP ")
+        cur.execute("SELECT S.Fname, S.Lname, COUNT(*) FROM EMPLOYEE AS E, EMPLOYEE AS S  WHERE E.SupervisorSSN=S.EmployeeSSN GROUP BY S.EmployeeSSN ORDER BY COUNT(*) DESC ")
         
         rows = cur.fetchall()
 
@@ -99,7 +97,7 @@ def main():
     getAllDeptEmp(conn)
 
     # For each employee who is a supervisor, retrieve the employee first and last name and number (count) of employees that are supervised. Order the result in descending order.
-    #getSupervisor(conn)
+    getSupervisor(conn)
 
 
 if __name__ == '__main__':

@@ -36,7 +36,7 @@ def insert_employee(conn):
               VALUES(?,?,?,?,?,?,?,?,?,?,?,?) '''
     
     cur = conn.cursor()
-    with open('EntryFiles/EMPLOYEE.csv.csv', "rt") as infile:
+    with open('EntryFiles/EMPLOYEE.csv', "rt") as infile:
         read = csv.reader(infile)
         for row in read:
             try:

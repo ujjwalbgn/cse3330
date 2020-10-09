@@ -1,19 +1,28 @@
 ## CSE 3330 Database 
+This is CSE3330 UTA Database project 
 
-#### Before you start writing code : ALWAYS do ``` git pull  ``` <br />
+### Getting Started
+Before you start make sure you have the Python 3.8 or higher installed in you operating system.<br/>
 
-If you are working on a new feature or adding something new do switch to a different branch:  <br />
-    command to create a different branch : ``` git branch BRANCHNAME``` <br />
-    command to switch to different branch: ``` git checkout BRANCHNAME``` <br />
-    <br />
-When done with making edits please push it to github: <br />
-    command to add changed ``` git add . ``` <br />
-    command to commit changes : ``` git commit -m "WRITE A SHORT INFO ABOUT WHAT YOU CHANGES OR MADE"```   <br />
-    command to push to github : ``` git push``` <br />
-    
-After the push, switch back to master using ```git checkout master``` 
+### Initial Setup 
+* Clone the CSE3330 repo:
+    * To clone the repo run ```git clone https://github.com/ujjwalbgn/cse3330/ ```
+* Navigate into the repository  ```cd cse3330```
 
-Other Helpful commands:
-    To check current status in git : ```git status```
-    To list all branches : ```git branch```
-    To delete old branch : ``` git branch BRANCH NAME -D```
+### Create Database, Tables amd Insert Data
+* To create database (if not present), Create Table and Insert data into table run  ```createInsert.py``` which is located inside <b> databaseScripts</b> folder.<br/>
+<i>Rerunning ```createInsert.py``` will generate "UNIQUE constraint failed" error as the script will try to reinsert exisiting data into the database.</i>
+
+### 
+Running Database Query
+* To run the query run ```queries.py``` which is located inside <b> databaseScripts</b> folder.<br/>
+This will print out the results into the command prompt.
+
+* The arguments for the query functions can be changed depending on the needs: <br/>
+Example:
+    > #Enter a department name, and retrieve all the names and salaries of all employees who work in that department.
+
+   > ```getNameSalaries(conn, "Research")```</br>
+
+    To obtain info about another dept. we can replace ```"Research"``` with name of another dept. lets say ```"Sales"```.   
+    >     ```getNameSalaries(conn, "Sales")```</br>
