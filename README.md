@@ -24,5 +24,5 @@ Example:
 
    > ```getNameSalaries(conn, "Research")```</br>
 
-    To obtain info about another dept. we can replace ```"Research"``` with name of another dept. lets say ```"Sales"```.   
-    >     ```getNameSalaries(conn, "Sales")```</br>
+    To obtain info about another dept. we can replace ```"Research"``` with name of another dept. lets say ```"Sales"```.      
+    > ```getNameSalaries(conn, "Sales")```</br>
