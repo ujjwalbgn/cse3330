@@ -71,7 +71,7 @@ def insert_rate(conn, rate):
 
 def main():
     #database Connection
-    conn = create_connection(r"P2Part2.db")
+    conn = create_connection(r"CarRental.db")
 
     sql_create_customer_table = """ CREATE TABLE IF NOT EXISTS customer (
                                     CustID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -91,7 +91,7 @@ def main():
                                     VehicleID char(17) NOT NULL ,
                                     StartDate char(10) NOT NULL,
                                     OrderDate char(10) NOT NULL,
-                                    RentalTYpe int,
+                                    RentalType int,
                                     Qty int,
                                     ReturnDate char(10) NOT NULL,
                                     TotalAmount float NOT NULL,
