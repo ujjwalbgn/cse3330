@@ -116,7 +116,7 @@ def main():
         create_table(conn, sql_create_vehicle_table)
         create_table(conn, sql_create_rate_table)
         create_table(conn, sql_create_rental_table)
-
+        print("Database Tables Created")
 
     else:
         print("Error! cannot create the database connection.")
@@ -206,8 +206,8 @@ def main():
     vehicle_17 = ('3VW2A7AU1FM012211',"Volkswagen Golf",2015,1,0)
     vehicle_18 = ('4S4BRCFC1E3203823',"Subaru Outback",2014,4,0)
     vehicle_19 = ('4S4BSBF39F3261064',"Subaru Outback",2015,4,0)
-    #vehicle_20 = ('4S4BSELC0F3325370',"Subaru Outback",2015,4,0)
-    vehicle_21 = ('4S4BSELC0F3325370',"Subaru Outback",2015,4,0)
+    vehicle_20 = ('4S4BSELC0F3325370',"Subaru Outback",2015,4,0)
+    vehicle_21 = ('5FNRL6H58KB133711',"Honda Odyssey",2019,6,1)
     vehicle_22 = ('5J6RM4H90FL028629',"Honda CR-V",2015,4,0)
     vehicle_23 = ('5N1AL0MM8EL549388',"Infiniti JX35",2014,4,1)
     vehicle_24 = ('5NPDH4AE2FH565275',"Hyundai Elantra",2015,1,0)
@@ -268,7 +268,7 @@ def main():
     insert_vehicle(conn, vehicle_17)
     insert_vehicle(conn, vehicle_18)
     insert_vehicle(conn, vehicle_19)
-    #insert_vehicle(conn, vehicle_20)
+    insert_vehicle(conn, vehicle_20)
     insert_vehicle(conn, vehicle_21)
     insert_vehicle(conn, vehicle_22)
     insert_vehicle(conn, vehicle_23)
@@ -386,6 +386,23 @@ def main():
     insert_rate(conn,rate_12)
 
 
+    # checking the number of rows inserted
+    cur = conn.cursor()
+    cur.execute("SELECT count(*)  FROM customer")
+    rows = cur.fetchone()
+    print("No. of Customers : " + str(list(rows)))
+
+    cur.execute("SELECT count(*) FROM vehicle")
+    rows = cur.fetchone()
+    print("No. of vehicle : " + str(list(rows)))
+
+    cur.execute("SELECT count(*) FROM rate")
+    rows = cur.fetchone()
+    print("No. of rate : " + str(list(rows)))
+
+    cur.execute("SELECT count(*) FROM rental")
+    rows = cur.fetchone()
+    print("No. of rental : " + str(list(rows)))
 
     conn.close()
 
