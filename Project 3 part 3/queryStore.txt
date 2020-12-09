@@ -1,5 +1,0 @@
-1) Alter TABLE rental ADD returned INT;
-
-UPDATE rental SET returned = 1 WHERE PaymentDate IS NOT NULL;
-
-UPDATE rental SET returned = 0 WHERE PaymentDate IS NULL;
