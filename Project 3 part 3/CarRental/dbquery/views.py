@@ -24,13 +24,36 @@ def Customer(request):
 
     else:
         form = CustomerForms()
-        # cursor.execute('''SELECT * FROM Customer''')
-        # customers = cursor.fetchall()
 
         customers = get_all_customer()
 
         content = {'customers':customers,'form': form}
 
-        # return HttpResponse(customers)
         return render(request,'dbquery/customer.html',content)
 
+
+def Vehicle(request):
+    cursor = connection.cursor()
+
+    if request.method == 'POST':
+        form = VehicleForms(request.POST)
+        if form.is_valid():
+            vehicleid = str(form.cleaned_data['vehicleid'])
+            description = str(form.cleaned_data['description'])
+            year = int(form.cleaned_data['year'])
+            type = int(form.cleaned_data['type'])
+            category = int(form.cleaned_data['category'])
+
+            new_vehicle = [vehicleid, description,year,type,category]
+
+            add_new_vehicle(new_vehicle)
+            return redirect('vehicle')
+
+    else:
+        form = VehicleForms()
+
+        vehicles = get_all_vehicle()
+
+        content = {'vehicles': vehicles, 'form': form}
+
+        return render(request, 'dbquery/vehicle.html', content)

@@ -7,6 +7,11 @@ class CustomerForms(ModelForm):
         model = Customer
         fields = '__all__'
 
+class VehicleForms(ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = '__all__'
+
 # class RateForms(ModelForm):
 #     class Meta:
 #         model = Customer

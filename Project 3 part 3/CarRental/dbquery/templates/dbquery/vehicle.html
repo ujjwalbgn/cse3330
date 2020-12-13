@@ -1,0 +1,32 @@
+{% extends 'dbquery/main.html' %}
+
+{% block content %}
+     {% load myfilters %}
+
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        {%  for field  in form %}
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ field.label }}</label>
+                <div class="col-sm-9">
+                    {{ field |addclass:'form-control' }}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="form-group row">
+            <div class="col-sm-9">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <hr/>
+    {% if vehicles %}
+        <ul>
+            {% for vehicle in vehicles %}
+                <li>{{ vehicle }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
