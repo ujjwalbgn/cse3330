@@ -25,8 +25,9 @@
     {% if customers %}
         <ul>
             {% for customer in customers %}
-                <li>{{ customer }}</li>
+                <li> {{ customer.CustID }} {{ customer.name }} {{ customer.phone }}</li>
             {% endfor %}
         </ul>
     {% endif %}
 {% endblock %}
+

@@ -1,7 +1,7 @@
 {% extends 'dbquery/main.html' %}
 
 {% block content %}
-     {% load myfilters %}
+    {% load myfilters %}
 
 
     <form method="POST" action="">
@@ -22,11 +22,52 @@
     </form>
 
     <hr/>
-    {% if vehicles %}
-        <ul>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">VIN</th>
+            <th scope="col">Description</th>
+            <th scope="col">Year</th>
+            <th scope="col">Type</th>
+            <th scope="col">category</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if vehicles %}
             {% for vehicle in vehicles %}
-                <li>{{ vehicle }}</li>
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ vehicle.pk }}</td>
+                    <td>{{ vehicle.description }}</td>
+                    <td>{{ vehicle.year }}</td>
+                    <td>
+                        {% if vehicle.type == 1 %}
+                            Compact
+                        {% elif vehicle.type == 2 %}
+                            Medium
+                        {% elif vehicle.type == 3 %}
+                            Large
+                        {% elif vehicle.type == 4 %}
+                            SUV
+                        {% elif vehicle.type == 5 %}
+                            Truck
+                        {% elif vehicle.type == 6 %}
+                            Van
+                        {% endif %}
+
+                    </td>
+                    <td>
+                        {% if vehicle.category == 0 %}
+                            Basic
+                        {% elif vehicle.category == 1 %}
+                            Luxury
+                        {% endif %}
+                    </td>
+                </tr>
             {% endfor %}
-        </ul>
-    {% endif %}
+        {% endif %}
+        </tbody>
+    </table>
+
 {% endblock %}

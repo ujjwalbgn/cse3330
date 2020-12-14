@@ -8,7 +8,7 @@ from .forms import *
 from .sql_query import  *
 # Create your views here.
 
-def Customer(request):
+def customerView(request):
     cursor = connection.cursor()
 
     if request.method == 'POST':
@@ -18,21 +18,24 @@ def Customer(request):
             phone = str(form.cleaned_data['phone'])
 
             new_customer = [name,phone]
-
             add_new_customer(new_customer)
+
             return redirect('customer')
 
     else:
         form = CustomerForms()
 
-        customers = get_all_customer()
+        # customers = get_all_customer()
 
+        name_map = {'name': 'name', 'phone': 'phone','pk' : 'CustId'}
+        customers = Customer.objects.raw('SELECT * FROM customer',translations=name_map)
+        print(customers)
         content = {'customers':customers,'form': form}
 
         return render(request,'dbquery/customer.html',content)
 
 
-def Vehicle(request):
+def vehicleView(request):
     cursor = connection.cursor()
 
     if request.method == 'POST':
@@ -52,8 +55,13 @@ def Vehicle(request):
     else:
         form = VehicleForms()
 
-        vehicles = get_all_vehicle()
+        # vehicles = get_all_vehicle()
 
+        name_map = {'description': 'description', 'year': 'year','type': 'type',
+                    'category': 'category','pk' : 'vehicleid'}
+
+        vehicles = Vehicle.objects.raw('SELECT * FROM vehicle',translations=name_map)
+        # print(vehicles)
         content = {'vehicles': vehicles, 'form': form}
 
         return render(request, 'dbquery/vehicle.html', content)
