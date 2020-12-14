@@ -1,0 +1,86 @@
+{% extends 'dbquery/main.html' %}
+
+{% block content %}
+    {% load myfilters %}
+
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Select Rental Start Date</label>
+            <div class="col-sm-9">
+                <input type="date" id="start_date" name="start_date"
+                       value="2020-12-22">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-9">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+
+
+    <hr/>
+    {% if vehicles %}
+        <h3>Available for Rental</h3>
+        <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">VIN</th>
+            <th scope="col">Description</th>
+            <th scope="col">Year</th>
+            <th scope="col">Type</th>
+            <th scope="col">category</th>
+            <th>Daily Rate</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for vehicle in vehicles %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ vehicle.pk }}</td>
+                <td>{{ vehicle.description }}</td>
+                <td>{{ vehicle.year }}</td>
+                <td>
+                    {% if vehicle.type == 1 %}
+                        Compact
+                    {% elif vehicle.type == 2 %}
+                        Medium
+                    {% elif vehicle.type == 3 %}
+                        Large
+                    {% elif vehicle.type == 4 %}
+                        SUV
+                    {% elif vehicle.type == 5 %}
+                        Truck
+                    {% elif vehicle.type == 6 %}
+                        Van
+                    {% endif %}
+
+                </td>
+                <td>
+                    {% if vehicle.category == 0 %}
+                        Basic
+                    {% elif vehicle.category == 1 %}
+                        Luxury
+                    {% endif %}
+                </td>
+                <td>
+                    {{ vehicle.daily_rate }}
+                </td>
+                <td>
+                    <form action="{% url 'bookRental' vehicle.pk %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger mb-1">Select</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+</tbody>
+</table>
+
+{% endblock %}

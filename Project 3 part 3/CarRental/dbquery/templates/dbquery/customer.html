@@ -1,7 +1,7 @@
 {% extends 'dbquery/main.html' %}
 
 {% block content %}
-     {% load myfilters %}
+    {% load myfilters %}
 
 
     <form method="POST" action="">
@@ -23,11 +23,26 @@
 
     <hr/>
     {% if customers %}
-        <ul>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Phone</th>
+            </tr>
+            </thead>
+            <tbody>
             {% for customer in customers %}
-                <li> {{ customer.CustID }} {{ customer.name }} {{ customer.phone }}</li>
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ customer.pk }}</td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.phone }}</td>
+            </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
     {% endif %}
 {% endblock %}
 

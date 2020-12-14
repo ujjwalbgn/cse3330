@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 import request
 from django.db import connection
 from django.http import HttpResponse
+import datetime
+
 
 from .models import *
 from .forms import *
@@ -9,8 +11,6 @@ from .sql_query import  *
 # Create your views here.
 
 def customerView(request):
-    cursor = connection.cursor()
-
     if request.method == 'POST':
         form = CustomerForms(request.POST)
         if form.is_valid():
@@ -36,8 +36,6 @@ def customerView(request):
 
 
 def vehicleView(request):
-    cursor = connection.cursor()
-
     if request.method == 'POST':
         form = VehicleForms(request.POST)
         if form.is_valid():
@@ -65,3 +63,40 @@ def vehicleView(request):
         content = {'vehicles': vehicles, 'form': form}
 
         return render(request, 'dbquery/vehicle.html', content)
+
+def searchRental(request):
+
+    if request.method == 'POST':
+        start_date = str(request.POST['start_date'])
+
+        request.session['rental_start_date'] = start_date
+
+        name_map = {'description': 'description', 'year': 'year', 'type': 'type',
+                    'category': 'category', 'pk': 'vehicleid','daily_rate': 'daily_rate'}
+        vehicles = Rental.objects.raw(
+            'SELECT  DISTINCT vehicle.vehicleid as id, description as description, year as year, rate.type as type, '
+            'rate.category as category, rate.Daily as daily_rate '
+            '  FROM vehicle, rental, rate WHERE (vehicle.vehicleid NOT IN (SELECT rental.VehicleID from rental) '
+            'AND rental.ReturnDate < %s ) AND vehicle.Category = RATE.Category '
+            'AND vehicle.Type = rate.Type',[start_date],translations=name_map)
+
+        print(vehicles)
+        content = {'vehicles': vehicles}
+        return render(request, 'dbquery/search_rental.html', content)
+    else:
+        # form = SearchRentalForm()
+        content = {}
+        return render(request, 'dbquery/search_rental.html', content)
+
+def bookRental(request,pk):
+    if request.method == 'POST':
+        vehicle_id = pk
+        vehicle = Vehicle.objects.get(vehicleid= pk )
+        # print(vehicle.description)
+        request.session['vehicle_id'] = vehicle_id
+
+        form = RentalForms()
+        order_date = datetime.date.today().strftime ("%Y-%m-%d")
+        print(order_date)
+        content = {'vehicle' : vehicle, 'form':form, 'order_date': order_date}
+        return render(request, 'dbquery/book_rental.html', content)

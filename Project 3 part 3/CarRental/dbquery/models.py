@@ -17,6 +17,8 @@ class Customer(models.Model):
         managed = False
         db_table = 'customer'
 
+    def __str__(self):
+        return self.name
 
 class Rate(models.Model):
     type = models.IntegerField(db_column='Type')  # Field name made lowercase.
@@ -37,7 +39,7 @@ class Rental(models.Model):
     rentaltype = models.IntegerField(db_column='RentalType', blank=True, null=True)  # Field name made lowercase.
     qty = models.IntegerField(db_column='Qty', blank=True, null=True)  # Field name made lowercase.
     returndate = models.CharField(db_column='ReturnDate', max_length=10)  # Field name made lowercase.
-    totalamount = models.TextField(db_column='TotalAmount')  # Field name made lowercase. This field type is a guess.
+    totalamount = models.DecimalField(db_column='TotalAmount',max_digits = 20, decimal_places =2)  # Field name made lowercase. This field type is a guess.
     paymentdate = models.CharField(db_column='PaymentDate', max_length=10, blank=True, null=True)  # Field name made lowercase.
     returned = models.IntegerField(blank=True, null=True)
 
