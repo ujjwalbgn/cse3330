@@ -67,15 +67,6 @@ def searchRental(request):
 
         request.session['rental_start_date'] = start_date
 
-        # name_map = {'description': 'description', 'year': 'year', 'type': 'type',
-        #             'category': 'category', 'pk': 'vehicleid','daily_rate': 'daily_rate'}
-        # vehicles = Rental.objects.raw(
-        #     'SELECT  DISTINCT vehicle.vehicleid as id, description as description, year as year, rate.type as type, '
-        #     'rate.category as category, rate.Daily as daily_rate '
-        #     '  FROM vehicle, rental, rate WHERE (vehicle.vehicleid NOT IN (SELECT rental.VehicleID from rental) '
-        #     'AND rental.ReturnDate < %s ) AND vehicle.Category = RATE.Category '
-        #     'AND vehicle.Type = rate.Type',[start_date],translations=name_map)
-
         vehicles = search_available_vehicle(str(start_date))
 
         print(vehicles)
@@ -90,7 +81,6 @@ def bookRental(request,pk):
     if request.method == 'POST':
         vehicle_id = pk
         vehicle = Vehicle.objects.get(vehicleid= pk )
-        # print(vehicle.description)
         request.session['vehicle_id'] = vehicle_id
         start_date = request.session['rental_start_date']
         form = RentalForms()
@@ -107,6 +97,12 @@ def submitBooking(request):
             vehicleid = request.session['vehicle_id']
             start_date = request.session['rental_start_date']
             order_date = request.session['order_date']
+
+            # clear sessions
+            del request.session['vehicle_id']
+            del request.session['rental_start_date']
+            del request.session['order_date']
+
             custid = str(request.POST['custid'])
             rentaltype = str(form.cleaned_data['rentaltype'])
             qty = str(form.cleaned_data['qty'])
@@ -116,31 +112,40 @@ def submitBooking(request):
             returned = str(0)
 
             rental =[custid,vehicleid,start_date,order_date,rentaltype,qty,returndate,totalamount,paymentdate,returned]
+            print(rental)
+
             add_new_rental(rental)
-            # print(rental)
+
             messages.success(request, 'Booking has been Saved. You can make another booking.')
             return redirect('searchRental')
 
 def updateBooking (request):
     if request.method == 'POST':
-        returndate = str(request.POST['returndate'])
+        payment_date = str(request.POST['payment_date'])
+        returned = str(request.POST['returned'])
 
+        vehicle_id = request.session['vehicle_id']
+        return_date = request.session['return_date']
+
+        update_rented_vehicle([payment_date,returned,vehicle_id,return_date])
+
+        messages.success(request, 'Rental has been saved')
+        return redirect('searchBooking')
     else :
         return render(request,'dbquery/update_booking.html')
 
 def searchBooking (request):
     if request.method == 'POST':
         vehicle_id = str(request.POST['vehicleid'])
-        start_date = str(request.POST['start_date'])
+        return_date = str(request.POST['return_date'])
         vehicle = Vehicle.objects.get(vehicleid= vehicle_id)
 
-        # rental_map = {'custid' : 'CustID', 'vehicleid' : 'VehicleID', 'startdate' : 'StartDate','orderdate' : 'OrderDate',
-        #               'rentaltype':'RentalType','qty':'Qty','returndate':'ReturnDate','totalamount':'TotalAmount',
-        #               'paymentdate':'paymentdate','returned':'returned'}
+        request.session['vehicle_id'] = vehicle_id
+        request.session['return_date'] = return_date
 
-        # rental = Rental.objects.raw('SELECT * FROM RENTAL WHERE vehicleid = %s AND startdate = %s',
-        #                             [vehicle_id,start_date], rental_map)
+        rental = search_rented_vehicle([vehicle_id,return_date])
 
+        print(rental)
 
         content = {'vehicle': vehicle,'rental': rental}
 

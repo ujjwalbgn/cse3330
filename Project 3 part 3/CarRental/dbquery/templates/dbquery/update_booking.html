@@ -2,21 +2,58 @@
 
 {% block content %}
     {% load myfilters %}
-    Update Booking for : <br/>
-    Vehicle Selected : {{ vehicle.description }} <br/>
-    Start Date: {{ start_date }} <br/>
-    Order Date : {{ rental.orderdate }} <br/>
+    <script type="text/javascript">
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            w=window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
+    </script>
+    <div id="print-content">
+        <h3>Rental Details</h3>
+        Booking By : {{ rental.11 }} <br/>
+        Vehicle Selected : {{ vehicle.description }} <br/>
+        Order Date : {{ rental.3 }} <br/>
+        Rental Start Date: {{ rental.2 }} <br/>
+        Rental Return Date: {{ rental.6 }} <br/>
+        Total Cost : {{ rental.7 }} <br/>
+        Payment Date: {{ rental.8 }} <br/>
+        Returned Status: {% if rental.9 == 0 %}
+        Vehicle Not Returned
+    {% elif rental.9 == 1 %}
+        Vehicle Returned
+    {% endif %} <br/>
+        <form>
+
+            <input type="button" onclick="printDiv('print-content')" value="print"/>
+        </form>
+    </div>
+
     <hr/>
+    <h3>Process Returns Rental</h3>
     <form method="POST" action="{% url 'updateBooking' %}">
         {% csrf_token %}
-        {%  for field  in form %}
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">{{ field.label }}</label>
-                <div class="col-sm-9">
-                    {{ field |addclass:'form-control' }}
-                </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Payment Date</label>
+            <div class="col-sm-9">
+                <input type="date" id="payment_date" name="payment_date">
             </div>
-        {% endfor %}
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Return Status</label>
+            <div class="col-sm-9">
+                <select class="form-select"  id="retuned" name="returned">
+                    <option selected>Select Return Status</option>
+                    <option value="0">Vehicle Not Returned</option>
+                    <option value="1">        Vehicle Returned
+                    </option>
+                </select>
+            </div>
+        </div>
+
         <div class="form-group row">
             <div class="col-sm-9">
                 <button type="submit" class="btn btn-primary">Submit</button>
