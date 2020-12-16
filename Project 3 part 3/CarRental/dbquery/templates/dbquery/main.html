@@ -46,6 +46,17 @@
 </header>
 
 <main class="container">
+
+    {% if messages %}
+        {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+        <p id="messages">
+            {{ message }}
+        </p>
+        </div>
+        {% endfor %}
+    {% endif %}
+
     {% block content %}
     {% endblock %}
     <footer class="pt-4 my-md-5 pt-md-5 border-top">

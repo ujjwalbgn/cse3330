@@ -25,5 +25,5 @@ class RentalForms(ModelForm):
     class Meta:
         model = Rental
         fields = '__all__'
-        exclude = ['vehicleid','startdate','orderdate']
+        exclude = ['vehicleid','startdate','orderdate','returned']
         widgets = {'returndate': DateInput}

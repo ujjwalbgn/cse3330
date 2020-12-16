@@ -36,3 +36,15 @@ def add_new_vehicle(vehicle):
         cur.commit()
     except:
         print("Error at Insert Customer")
+
+def add_new_rental(vehicle):
+    sql = ''' INSERT INTO rental (CustID, VehicleID, StartDate, OrderDate, RentalType, Qty, ReturnDate, TotalAmount,
+     PaymentDate, returned)
+              VALUES (?,?,?,?,?,?,?,?,?,?)'''
+
+    try:
+        cur = connection.cursor()
+        cur.execute(sql,vehicle)
+        cur.commit()
+    except:
+        print("Error at Insert Customer")
