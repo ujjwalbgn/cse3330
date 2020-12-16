@@ -22,6 +22,8 @@ def customerView(request):
             add_new_customer(new_customer)
 
             return redirect('customer')
+        else:
+            messages.warning(request,'Please try again')
 
     else:
         form = CustomerForms()
