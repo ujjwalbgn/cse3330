@@ -28,10 +28,8 @@ def customerView(request):
     else:
         form = CustomerForms()
 
-        # customers = get_all_customer()
+        customers = get_all_customer()
 
-        name_map = {'name': 'name', 'phone': 'phone','pk' : 'CustId'}
-        customers = Customer.objects.raw('SELECT * FROM customer',translations=name_map)
         print(customers)
         content = {'customers':customers,'form': form}
 
@@ -56,13 +54,8 @@ def vehicleView(request):
     else:
         form = VehicleForms()
 
-        # vehicles = get_all_vehicle()
+        vehicles = get_all_vehicle()
 
-        name_map = {'description': 'description', 'year': 'year','type': 'type',
-                    'category': 'category','pk' : 'vehicleid'}
-
-        vehicles = Vehicle.objects.raw('SELECT * FROM vehicle',translations=name_map)
-        # print(vehicles)
         content = {'vehicles': vehicles, 'form': form}
 
         return render(request, 'dbquery/vehicle.html', content)
@@ -74,16 +67,18 @@ def searchRental(request):
 
         request.session['rental_start_date'] = start_date
 
-        name_map = {'description': 'description', 'year': 'year', 'type': 'type',
-                    'category': 'category', 'pk': 'vehicleid','daily_rate': 'daily_rate'}
-        vehicles = Rental.objects.raw(
-            'SELECT  DISTINCT vehicle.vehicleid as id, description as description, year as year, rate.type as type, '
-            'rate.category as category, rate.Daily as daily_rate '
-            '  FROM vehicle, rental, rate WHERE (vehicle.vehicleid NOT IN (SELECT rental.VehicleID from rental) '
-            'AND rental.ReturnDate < %s ) AND vehicle.Category = RATE.Category '
-            'AND vehicle.Type = rate.Type',[start_date],translations=name_map)
+        # name_map = {'description': 'description', 'year': 'year', 'type': 'type',
+        #             'category': 'category', 'pk': 'vehicleid','daily_rate': 'daily_rate'}
+        # vehicles = Rental.objects.raw(
+        #     'SELECT  DISTINCT vehicle.vehicleid as id, description as description, year as year, rate.type as type, '
+        #     'rate.category as category, rate.Daily as daily_rate '
+        #     '  FROM vehicle, rental, rate WHERE (vehicle.vehicleid NOT IN (SELECT rental.VehicleID from rental) '
+        #     'AND rental.ReturnDate < %s ) AND vehicle.Category = RATE.Category '
+        #     'AND vehicle.Type = rate.Type',[start_date],translations=name_map)
 
-        # print(vehicles)
+        vehicles = search_available_vehicle(str(start_date))
+
+        print(vehicles)
         content = {'vehicles': vehicles}
         return render(request, 'dbquery/search_rental.html', content)
     else:
@@ -122,6 +117,33 @@ def submitBooking(request):
 
             rental =[custid,vehicleid,start_date,order_date,rentaltype,qty,returndate,totalamount,paymentdate,returned]
             add_new_rental(rental)
-            print(rental)
+            # print(rental)
             messages.success(request, 'Booking has been Saved. You can make another booking.')
             return redirect('searchRental')
+
+def updateBooking (request):
+    if request.method == 'POST':
+        returndate = str(request.POST['returndate'])
+
+    else :
+        return render(request,'dbquery/update_booking.html')
+
+def searchBooking (request):
+    if request.method == 'POST':
+        vehicle_id = str(request.POST['vehicleid'])
+        start_date = str(request.POST['start_date'])
+        vehicle = Vehicle.objects.get(vehicleid= vehicle_id)
+
+        # rental_map = {'custid' : 'CustID', 'vehicleid' : 'VehicleID', 'startdate' : 'StartDate','orderdate' : 'OrderDate',
+        #               'rentaltype':'RentalType','qty':'Qty','returndate':'ReturnDate','totalamount':'TotalAmount',
+        #               'paymentdate':'paymentdate','returned':'returned'}
+
+        # rental = Rental.objects.raw('SELECT * FROM RENTAL WHERE vehicleid = %s AND startdate = %s',
+        #                             [vehicle_id,start_date], rental_map)
+
+
+        content = {'vehicle': vehicle,'rental': rental}
+
+        return render(request, 'dbquery/update_booking.html',content)
+    else:
+        return render(request, 'dbquery/search_booking.html')

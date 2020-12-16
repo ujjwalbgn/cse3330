@@ -22,6 +22,7 @@
     </form>
 
     <hr/>
+{#    {{ vehicles }}#}
     <table class="table">
         <thead>
         <tr>
@@ -38,29 +39,29 @@
             {% for vehicle in vehicles %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ vehicle.pk }}</td>
-                    <td>{{ vehicle.description }}</td>
-                    <td>{{ vehicle.year }}</td>
+                    <td>{{ vehicle.0 }}</td>
+                    <td>{{ vehicle.1 }}</td>
+                    <td>{{ vehicle.2 }}</td>
                     <td>
-                        {% if vehicle.type == 1 %}
+                        {% if vehicle.3 == 1 %}
                             Compact
-                        {% elif vehicle.type == 2 %}
+                        {% elif vehicle.3 == 2 %}
                             Medium
-                        {% elif vehicle.type == 3 %}
+                        {% elif vehicle.3 == 3 %}
                             Large
-                        {% elif vehicle.type == 4 %}
+                        {% elif vehicle.3 == 4 %}
                             SUV
-                        {% elif vehicle.type == 5 %}
+                        {% elif vehicle.3 == 5 %}
                             Truck
-                        {% elif vehicle.type == 6 %}
+                        {% elif vehicle.3 == 6 %}
                             Van
                         {% endif %}
 
                     </td>
                     <td>
-                        {% if vehicle.category == 0 %}
+                        {% if vehicle.4 == 0 %}
                             Basic
-                        {% elif vehicle.category == 1 %}
+                        {% elif vehicle.4 == 1 %}
                             Luxury
                         {% endif %}
                     </td>

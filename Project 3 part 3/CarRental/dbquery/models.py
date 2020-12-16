@@ -46,6 +46,7 @@ class Rental(models.Model):
     class Meta:
         managed = False
         db_table = 'rental'
+        unique_together = (('custid', 'startdate'),)
 
 
 class Vehicle(models.Model):
