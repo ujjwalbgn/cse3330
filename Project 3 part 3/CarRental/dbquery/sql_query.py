@@ -13,13 +13,19 @@ def add_new_customer(customer):
         print("Customer")
 
 def get_all_customer():
-    # cur = connection.cursor()
-    # cur.execute('''SELECT * FROM Customer''')
-    # result = cur.fetchall()
-    #
-    # connection.row_factory = sqlite3.Row
+
     c = connection.cursor()
-    c.execute('select * from customer')
+    c.execute('''SELECT customer.CustID as CustomerID, name as CustomerName, phone, sum(case WHEN rental.PaymentDate 
+    != 'NULL' THEN TotalAmount ELSE 0 END) as "Remaining Amount" 
+ FROM customer LEFT JOIN rental ON customer.CustID = rental.CustID GROUP BY customer.CustID''')
+    result = c.fetchall()
+    return result
+
+
+def search_customer(customer):
+    c = connection.cursor()
+    c.execute('''SELECT customer.CustID as CustomerID, name as CustomerName, phone, sum(case WHEN rental.PaymentDate != 'NULL' THEN TotalAmount ELSE 0 END) as "Remaining Amount" 
+ FROM customer LEFT JOIN rental ON customer.CustID = rental.CustID WHERE name like '%'?'%' GROUP BY customer.CustID''', customer)
     result = c.fetchall()
     return result
 

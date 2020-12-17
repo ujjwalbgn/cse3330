@@ -3,7 +3,7 @@
 {% block content %}
     {% load myfilters %}
 
-
+    <h3>Add Customer</h3>
     <form method="POST" action="">
         {% csrf_token %}
         {%  for field  in form %}
@@ -22,7 +22,23 @@
     </form>
 
     <hr/>
-{#    {{ customers }}#}
+    <h3>Search Customer</h3>
+     <form method="POST" action="{% url 'customerSearchView' %}">
+      {% csrf_token %}
+    <div class="form-group row">
+
+        <label class="col-sm-2 col-form-label">Enter Customer Name</label>
+        <div class="col-sm-9">
+            <input type="text" id="customer_name" name="customer_name">
+        </div>
+
+        <div class="col-sm-9">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+     </form>
+    <hr/>
+    <h3>View Customer</h3>
     {% if customers %}
         <table class="table">
             <thead>
@@ -31,16 +47,23 @@
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Phone</th>
+                <th scope="col">Remaining Amount</th>
             </tr>
             </thead>
             <tbody>
             {% for customer in customers %}
-            <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ customer.0 }}</td>
-                <td>{{ customer.1 }}</td>
-                <td>{{ customer.2 }}</td>
-            </tr>
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ customer.0 }}</td>
+                    <td>{{ customer.1 }}</td>
+                    <td>{{ customer.2 }}</td>
+                    <td>$ {% if customer.3 == 0 %}
+                        0.00
+                    {% else %}
+                        {{ customer.3 }}
+                    {% endif %}
+                    </td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

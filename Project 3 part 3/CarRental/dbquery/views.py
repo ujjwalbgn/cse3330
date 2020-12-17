@@ -36,6 +36,31 @@ def customerView(request):
         return render(request,'dbquery/customer.html',content)
 
 
+def customerSearchView(request):
+    if request.method == 'POST':
+        form = CustomerForms(request.POST)
+        if form.is_valid():
+            name = str(form.cleaned_data['name'])
+
+            customers = search_customer([name])
+
+            print(customers)
+            content = {'customers': customers, 'form': form}
+
+            return render(request, 'dbquery/customer.html', content)
+        else:
+            messages.warning(request,'Please try again')
+
+    else:
+        form = CustomerForms()
+
+        customers = get_all_customer()
+
+        # print(customers)
+        content = {'customers':customers,'form': form}
+
+        return render(request,'dbquery/customer.html',content)
+
 def vehicleView(request):
     if request.method == 'POST':
         form = VehicleForms(request.POST)

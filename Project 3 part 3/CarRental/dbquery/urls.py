@@ -9,5 +9,6 @@ urlpatterns = [
     path('submit_booking', views.submitBooking, name="submitBooking"),
     path('update_booking', views.updateBooking, name="updateBooking"),
     path('search_booking', views.searchBooking, name="searchBooking"),
+    path('customer_search', views.customerSearchView, name="customerSearchView"),
 
 ]
