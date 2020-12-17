@@ -1,0 +1,74 @@
+{% extends 'dbquery/main.html' %}
+
+{% block content %}
+    {% load myfilters %}
+
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        {%  for field  in form %}
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ field.label }}</label>
+                <div class="col-sm-9">
+                    {{ field |addclass:'form-control' }}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="form-group row">
+            <div class="col-sm-9">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <hr/>
+{#    {{ vehicles }}#}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">VIN</th>
+            <th scope="col">Description</th>
+            <th scope="col">Year</th>
+            <th scope="col">Type</th>
+            <th scope="col">category</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if vehicles %}
+            {% for vehicle in vehicles %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ vehicle.0 }}</td>
+                    <td>{{ vehicle.1 }}</td>
+                    <td>{{ vehicle.2 }}</td>
+                    <td>
+                        {% if vehicle.3 == 1 %}
+                            Compact
+                        {% elif vehicle.3 == 2 %}
+                            Medium
+                        {% elif vehicle.3 == 3 %}
+                            Large
+                        {% elif vehicle.3 == 4 %}
+                            SUV
+                        {% elif vehicle.3 == 5 %}
+                            Truck
+                        {% elif vehicle.3 == 6 %}
+                            Van
+                        {% endif %}
+
+                    </td>
+                    <td>
+                        {% if vehicle.4 == 0 %}
+                            Basic
+                        {% elif vehicle.4 == 1 %}
+                            Luxury
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}
