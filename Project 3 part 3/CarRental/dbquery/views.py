@@ -178,12 +178,14 @@ def searchBooking (request):
     if request.method == 'POST':
         vehicle_id = str(request.POST['vehicleid'])
         return_date = str(request.POST['return_date'])
+        customer_name = str(request.POST['customer_name'])
+
         vehicle = Vehicle.objects.get(vehicleid= vehicle_id)
 
         request.session['vehicle_id'] = vehicle_id
         request.session['return_date'] = return_date
 
-        rental = search_rented_vehicle([vehicle_id,return_date])
+        rental = search_rented_vehicle([vehicle_id,return_date,customer_name])
 
         print(rental)
 

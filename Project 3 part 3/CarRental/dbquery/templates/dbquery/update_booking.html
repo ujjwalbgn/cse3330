@@ -2,16 +2,8 @@
 
 {% block content %}
     {% load myfilters %}
-    <script type="text/javascript">
-        function printDiv(divName) {
-            var printContents = document.getElementById(divName).innerHTML;
-            w=window.open();
-            w.document.write(printContents);
-            w.print();
-            w.close();
-        }
-    </script>
-    <div id="print-content">
+
+
         <h3>Rental Details</h3>
         Booking By : {{ rental.11 }} <br/>
         Vehicle Selected : {{ vehicle.description }} <br/>
@@ -25,11 +17,7 @@
     {% elif rental.9 == 1 %}
         Vehicle Returned
     {% endif %} <br/>
-        <form>
 
-            <input type="button" onclick="printDiv('print-content')" value="print"/>
-        </form>
-    </div>
 
     <hr/>
     <h3>Process Returns Rental</h3>

@@ -3,7 +3,7 @@
 {% block content %}
     {% load myfilters %}
 
-
+    <h3>Add Vehicle</h3>
     <form method="POST" action="">
         {% csrf_token %}
         {%  for field  in form %}

@@ -25,8 +25,11 @@ def get_all_customer():
 def search_customer(customer_name):
     c = connection.cursor()
     search_field = ('%'+customer_name+'%')
-    c.execute('''SELECT customer.CustID as CustomerID, name as CustomerName, phone, sum(case WHEN rental.PaymentDate != 'NULL' THEN TotalAmount ELSE 0 END) as "Remaining Amount" 
- FROM customer LEFT JOIN rental ON customer.CustID = rental.CustID WHERE name like %s GROUP BY customer.CustID ORDER by "Remaining Amount" DESC''',[search_field] )
+    c.execute('''SELECT customer.CustID as CustomerID, name as CustomerName, phone, 
+    sum(case WHEN rental.PaymentDate != 'NULL' THEN TotalAmount ELSE 0 END) as "Remaining Amount" 
+ FROM customer LEFT JOIN rental ON customer.CustID = rental.CustID WHERE name
+  like %s  OR customer.CustID like %s GROUP BY customer.CustID ORDER by "Remaining Amount" DESC''',
+              [search_field,search_field] )
     result = c.fetchall()
     return result
 
@@ -78,7 +81,7 @@ def add_new_rental(rental):
 
 def search_rented_vehicle(rental):
     sql = '''SELECT * FROM RENTAL JOIN Customer on rental.CustID = customer.CustID 
-    WHERE vehicleid = %s AND returndate = %s'''
+    WHERE vehicleid = %s AND returndate = %s AND customer.name = %s'''
 
     cur = connection.cursor()
     cur.execute(sql,rental)
