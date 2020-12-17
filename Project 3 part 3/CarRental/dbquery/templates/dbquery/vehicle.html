@@ -20,9 +20,22 @@
             </div>
         </div>
     </form>
-
     <hr/>
-{#    {{ vehicles }}#}
+    <h3>Search Vehicle</h3>
+    <form method="POST" action="{% url 'vehicleSearchView' %}">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Search by the VIN, vehicle’s description</label>
+            <div class="col-sm-9">
+                <input type="text" id="vehicle_search" name="vehicle_search">
+            </div>
+
+            <div class="col-sm-9">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+    <hr/>
     <table class="table">
         <thead>
         <tr>
@@ -32,6 +45,7 @@
             <th scope="col">Year</th>
             <th scope="col">Type</th>
             <th scope="col">category</th>
+            <th scope="col">Avg Daily Rate</th>
         </tr>
         </thead>
         <tbody>
@@ -64,6 +78,13 @@
                         {% elif vehicle.4 == 1 %}
                             Luxury
                         {% endif %}
+                    </td>
+                    <td>
+                    {% if vehicle.5 == 0 %}
+                        Non-Applicable
+                    {% else %}
+                        ${{ vehicle.5 }}
+                    {% endif %}
                     </td>
                 </tr>
             {% endfor %}

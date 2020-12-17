@@ -30,7 +30,6 @@ def customerView(request):
 
         customers = get_all_customer()
 
-        print(customers)
         content = {'customers':customers,'form': form}
 
         return render(request,'dbquery/customer.html',content)
@@ -38,18 +37,14 @@ def customerView(request):
 
 def customerSearchView(request):
     if request.method == 'POST':
-        form = CustomerForms(request.POST)
-        if form.is_valid():
-            name = str(form.cleaned_data['name'])
+        name = str(request.POST['customer_name'])
+        customers = search_customer(name)
 
-            customers = search_customer([name])
+        form = CustomerForms()
+        content = {'customers': customers, 'form': form}
 
-            print(customers)
-            content = {'customers': customers, 'form': form}
+        return render(request, 'dbquery/customer.html', content)
 
-            return render(request, 'dbquery/customer.html', content)
-        else:
-            messages.warning(request,'Please try again')
 
     else:
         form = CustomerForms()
@@ -75,6 +70,26 @@ def vehicleView(request):
 
             add_new_vehicle(new_vehicle)
             return redirect('vehicle')
+
+    else:
+        form = VehicleForms()
+
+        vehicles = get_all_vehicle()
+
+        content = {'vehicles': vehicles, 'form': form}
+
+        return render(request, 'dbquery/vehicle.html', content)
+
+def vehicleSearchView(request):
+    if request.method == 'POST':
+        vehicle_search = str(request.POST['vehicle_search'])
+
+        vehicles = search_vehicle(vehicle_search)
+
+        form = VehicleForms()
+        content = {'vehicles': vehicles, 'form': form}
+
+        return render(request, 'dbquery/vehicle.html', content)
 
     else:
         form = VehicleForms()

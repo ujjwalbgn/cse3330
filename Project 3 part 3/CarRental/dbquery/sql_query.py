@@ -17,21 +17,30 @@ def get_all_customer():
     c = connection.cursor()
     c.execute('''SELECT customer.CustID as CustomerID, name as CustomerName, phone, sum(case WHEN rental.PaymentDate 
     != 'NULL' THEN TotalAmount ELSE 0 END) as "Remaining Amount" 
- FROM customer LEFT JOIN rental ON customer.CustID = rental.CustID GROUP BY customer.CustID''')
+ FROM customer LEFT JOIN rental ON customer.CustID = rental.CustID GROUP BY customer.CustID ORDER by "Remaining Amount" DESC''')
     result = c.fetchall()
     return result
 
 
-def search_customer(customer):
+def search_customer(customer_name):
     c = connection.cursor()
+    search_field = ('%'+customer_name+'%')
     c.execute('''SELECT customer.CustID as CustomerID, name as CustomerName, phone, sum(case WHEN rental.PaymentDate != 'NULL' THEN TotalAmount ELSE 0 END) as "Remaining Amount" 
- FROM customer LEFT JOIN rental ON customer.CustID = rental.CustID WHERE name like '%'?'%' GROUP BY customer.CustID''', customer)
+ FROM customer LEFT JOIN rental ON customer.CustID = rental.CustID WHERE name like %s GROUP BY customer.CustID ORDER by "Remaining Amount" DESC''',[search_field] )
     result = c.fetchall()
     return result
 
 def get_all_vehicle():
     cur = connection.cursor()
-    cur.execute('''SELECT * FROM Vehicle''')
+    cur.execute('''SELECT vehicle.VehicleID as VIN, Description, Year, Type, Category, round (avg(case WHEN rental.PaymentDate != 'NULL' THEN TotalAmount/((Julianday(ReturnDate)-Julianday(StartDate)) ) ELSE 'Non-Applicable' END),2)as 'Average Daily Cost' From vehicle left join rental on rental.VehicleID = vehicle.VehicleID GROUP by vehicle.VehicleID''')
+    result = cur.fetchall()
+    return result
+
+def search_vehicle(vehicle_search):
+    cur = connection.cursor()
+    search_field = ('%'+vehicle_search+'%')
+    cur.execute('''SELECT vehicle.VehicleID as VIN, Description, Year, Type, Category, round (avg(case WHEN rental.PaymentDate != 'NULL' THEN TotalAmount/((Julianday(ReturnDate)-Julianday(StartDate)) ) ELSE 'Non-Applicable' END),2)as 'Average Daily Cost' From vehicle left join rental on rental.VehicleID = vehicle.VehicleID 
+WHERE vehicle.VehicleID like %s OR vehicle.Description like %s  GROUP by vehicle.VehicleID''', [search_field,search_field])
     result = cur.fetchall()
     return result
 
